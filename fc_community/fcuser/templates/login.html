@@ -16,27 +16,22 @@
     <!-- 여기서 form을 만들껀데 bootstrap에 있는 form을 가져오자 -->
     <!-- components에 form이 있고 가져와서 우리것에 맞도록 변경하자 -->
     <form method="POST" action=".">
-      {% csrf_token %}
+      {% csrf_token %} {%for field in form%}
       <div class="form-group">
-        <label for="username">사용자이름</label>
+        <!-- label에서 사용할 id는 field안에 존재한다. -->
+        <label for="{{field.id_for_label}}">{{field.label}}</label>
+        <!-- id는 input tag도 같게 넣어줘야겠지 -->
         <input
-          type="text"
+          type="{{field.field.widget.input_type}}"
           class="form-control"
-          id="username"
-          placeholder="사용자이름"
-          name="username"
+          id="{{field.id_for_label}}"
+          placeholder="{{field.label}}"
+          name="{{field.name}}"
         />
       </div>
-      <div class="form-group">
-        <label for="password">비밀번호</label>
-        <input
-          type="password"
-          class="form-control"
-          id="password"
-          placeholder="비밀번호"
-          name="password"
-        />
-      </div>
+      {%if field.errors%}
+      <span style="color: red;">{{field.errors}}</span>
+      {%endif%} {%endfor%}
       <button type="submit" class="btn btn-primary">로그인</button>
     </form>
   </div>

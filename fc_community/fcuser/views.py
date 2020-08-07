@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Fcuser
 from django.http import HttpResponse  # 에러 메세지를 위함
 from django.contrib.auth.hashers import make_password, check_password
+from .form import LoginForm
 # Create your views here.
 
 
@@ -24,29 +25,15 @@ def logout(request):
 
 
 def login(request):  # 세션사용여부를 제외하면 계정만들기와 유사하다
-    if request.method == 'GET':
-        return render(request, 'login.html')
-    elif request.method == "POST":
-        username = request.POST.get('username', None)
-        password = request.POST.get('password', None)
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            request.session['user'] = form.user_id
+            return redirect('/')
+    else:
+        form = LoginForm()
 
-        res_data = {}
-        if not (username and password):
-            res_data['error'] = '모든값을 입력하세요'
-        else:
-            # fcuser model로 저장한 데이터와 같은지를 확인해야 한다.
-            # username로 찾아보고 비번이 일치하는지 확인한다.
-            # 이러면 해당 username를 불러온다.
-            fcuser = Fcuser.objects.get(username=username)
-
-            if check_password(password, fcuser.password):
-                # 비밀번호 일치, 로그인 처리(세션사용)!!
-                request.session['user'] = fcuser.id  # 현재 세션의 user에 입력받은 id를 삽입
-                return redirect('/')  # 끝나고 홈으로 가겠다는 뜻
-            else:
-                res_data['error'] = '비밀번호를 틀렸습니다.'
-
-        return render(request, 'login.html', res_data)
+    return render(request, 'login.html', {'form': form})
 
 
 def register(request):
