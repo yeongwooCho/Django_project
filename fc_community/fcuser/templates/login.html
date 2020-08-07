@@ -1,0 +1,44 @@
+{% extends "base.html" %} {%block contents%}
+<!-- mt-5는 여백추가 -->
+<div class="row mt-5">
+  <!-- text-center 정렬 -->
+  <div class="col-12 text-center">
+    <h1>로그인</h1>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-12">
+    {{error}}
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-12">
+    <!-- 여기서 form을 만들껀데 bootstrap에 있는 form을 가져오자 -->
+    <!-- components에 form이 있고 가져와서 우리것에 맞도록 변경하자 -->
+    <form method="POST" action=".">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="username">사용자이름</label>
+        <input
+          type="text"
+          class="form-control"
+          id="username"
+          placeholder="사용자이름"
+          name="username"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">비밀번호</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          placeholder="비밀번호"
+          name="password"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">로그인</button>
+    </form>
+  </div>
+</div>
+{%endblock%}
