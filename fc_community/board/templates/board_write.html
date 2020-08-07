@@ -1,0 +1,37 @@
+{%extends "base.html"%} {% block contents %}
+<!-- table 만들기 -->
+<div class="row mt-5">
+  <div class="col-12">
+    <form method="POST" action=".">
+      {% csrf_token %} {%for field in form%}
+      <div class="form-group">
+        <!-- label에서 사용할 id는 field안에 존재한다. -->
+        <label for="{{field.id_for_label}}">{{field.label}}</label>
+        {{field.field.widget.name}} {%ifequal field.name 'contents'%}
+        <textarea
+          class="form-control"
+          name="{{field.name}}"
+          placeholder="{{field.label}}"
+          id="{{field.id_for_label}}"
+          cols="30"
+          rows="10"
+        ></textarea>
+        {%else%}
+        <input
+          type="{{field.field.widget.input_type}}"
+          class="form-control"
+          id="{{field.id_for_label}}"
+          placeholder="{{field.label}}"
+          name="{{field.name}}"
+        />
+        {%endifequal%}
+        <!-- id는 input tag도 같게 넣어줘야겠지 -->
+      </div>
+      {%if field.errors%}
+      <span style="color: red;">{{field.errors}}</span>
+      {%endif%} {%endfor%}
+      <button type="submit" class="btn btn-primary">글쓰기</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

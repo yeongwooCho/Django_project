@@ -15,7 +15,7 @@ class LoginForm(forms.Form):  # 두개의 필드를 사용하는 form이 하나 
         },
         widget=forms.PasswordInput, label="비밀번호")
 
-    def clean(self):
+    def clean(self):  # 검증!!!!
         # 얘는 이미 기본적으로 만들어 져있는 함수이기에 super를 통해서
         # 기존에 forms의 클래스 Form안의 clean 함수를 호출해주고
         cleaned_data = super().clean()
