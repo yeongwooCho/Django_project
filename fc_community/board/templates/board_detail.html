@@ -16,6 +16,10 @@
       <textarea class="form-control" readonly cols="30" rows="10">
 {{board.contents}}</textarea
       >
+      <label for="tags">태그</label>
+      <span id="tags" class="form-control">
+        {{ board.tags.all|join:", " }}
+      </span>
     </div>
     <button class="btn btn-primary" onclick="location.href='/board/list/'">
       돌아가기

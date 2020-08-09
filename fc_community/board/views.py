@@ -5,6 +5,7 @@ from fcuser.models import Fcuser
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
+from tag.models import Tag
 # Create your views here.
 
 
@@ -38,6 +39,16 @@ def board_write(request):
             board.contents = form.cleaned_data['contents']
             board.writer = fcuser
             board.save()
+
+            tags = form.cleaned_data['tags'].split(',')
+            for tag in tags:
+                if not tag:
+                    continue
+
+                _tag, _ = Tag.objects.get_or_create(
+                    name=tag)  # 이름만 확인하면 되니깐
+                board.tags.add(_tag)
+
             return redirect('/board/list')
     else:
         form = BoardForm()
