@@ -1,6 +1,7 @@
 from django import forms
 from .models import Fcuser
 from django.contrib.auth.hashers import check_password
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class LoginForm(forms.Form):  # 두개의 필드를 사용하는 form이 하나 만들어 졌다.
@@ -25,7 +26,12 @@ class LoginForm(forms.Form):  # 두개의 필드를 사용하는 form이 하나 
         password = cleaned_data.get('password')
 
         if username and password:  # 각 값들이 비어있지않고 들어있을때
-            fcuser = Fcuser.objects.get(username=username)
+            try:
+                fcuser = Fcuser.objects.get(username=username)
+            except ObjectDoesNotExist:
+                self.add_error('username', '아이디가 없습니다.')
+                return
+
             if not check_password(password, fcuser.password):  # 여기선 session을 적용하지 않을 것임
                 # 특정 필드에 error을 넣는 함수
                 self.add_error('password', '비밀번호가 틀렸습니다.')

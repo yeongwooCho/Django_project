@@ -7,14 +7,7 @@ from .form import LoginForm
 
 
 def home(request):
-    # 로그인이 되었는지 확인하기 위해, 세션의 정보를 가져와서 출력해보자!!
-    user_id = request.session.get('user')
-    if user_id:  # 유저가 있으면 사용자 정보를 가져오자
-        # 세션의 유저키에 넣어던 것이 id 였다.
-        fcuser = Fcuser.objects.get(pk=user_id)  # 해당 id인 모델을 가져온다.
-        return HttpResponse(fcuser.username)
-
-    return HttpResponse('Home')
+    return render(request, "home.html")
 
 
 def logout(request):
